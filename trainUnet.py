@@ -56,8 +56,8 @@ def train_net(net,
         net.train()
 
         # reset the generators
-        train = get_imgs_and_masks(iddataset['train'], dir_img, dir_mask, img_scale)
-        val = get_imgs_and_masks(iddataset['val'], dir_img, dir_mask, img_scale)
+        train = get_imgs_and_masks(iddataset['train'], dir_img, dir_mask, img_scale, imgsize=640)
+        val = get_imgs_and_masks(iddataset['val'], dir_img, dir_mask, img_scale, imgsize=640)
 
         epoch_loss = 0
 

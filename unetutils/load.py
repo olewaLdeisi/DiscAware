@@ -20,23 +20,23 @@ def split_ids(ids, n=2):
     return ((id, i) for i in range(n) for id in ids)
 
 
-def to_cropped_imgs(ids, dir, suffix, scale):
+def to_cropped_imgs(ids, dir, suffix, scale, imgsize=None):
     """From a list of tuples, returns the correct cropped img"""
     for id, pos in ids:
         i = Image.open(dir + id + suffix)
-        im = resize_and_crop(Image.open(dir + id + suffix), scale=scale)
+        im = resize_and_crop(Image.open(dir + id + suffix), scale=scale, imgsize=imgsize)
         yield get_square(im, pos)
 
-def get_imgs_and_masks(ids, dir_img, dir_mask, scale):
+def get_imgs_and_masks(ids, dir_img, dir_mask, scale, imgsize=None):
     """Return all the couples (img, mask)"""
 
-    imgs = to_cropped_imgs(ids, dir_img, '.jpg', scale)
+    imgs = to_cropped_imgs(ids, dir_img, '.jpg', scale, imgsize)
 
     # need to transform from HWC to CHW
     imgs_switched = map(hwc_to_chw, imgs)
     imgs_normalized = map(normalize, imgs_switched)
 
-    masks = to_cropped_imgs(ids, dir_mask, '.png', scale)
+    masks = to_cropped_imgs(ids, dir_mask, '.png', scale, imgsize)
 
     return zip(imgs_normalized, masks)
 
