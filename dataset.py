@@ -20,20 +20,27 @@ class Dataloader(data.Dataset):
 
         with open(filepath, 'r') as f:
             for line in f:
-                img,mark = line.strip().split('@')
+                img,label = line.strip().split('@')
                 self.data_list.append('data/images/'+img.split('.')[0] + '.jpg')
-                self.label_list.append('data/labels/'+img)
-                self.mark_list.append(int(mark))
+                self.mark_list.append('data/labels/'+img)
+                self.label_list.append(int(label))
+
+                # img,mark = line.strip().split('@')
+                # self.data_list.append('data/images/'+img.split('.')[0] + '.jpg')
+                # self.label_list.append('data/labels/'+img)
+                # self.mark_list.append(int(mark))
 
     def __getitem__(self, item):
         img = self.data_list[item]
-        label = self.label_list[item]
-        img = Image.open(img)
-        label = Image.open(label)
-        img = self.transform(img)
-        label = self.transform(label)
         mark = self.mark_list[item]
-        return img,label,mark
+        img = Image.open(img)
+        mark = Image.open(mark)
+        img = self.transform(img)
+        mark = self.transform(mark)
+        mark[mark > 0] = 1
+        label = self.label_list[item]
+        # 原图 分割图 分类标签
+        return img,mark,label
 
     def __len__(self):
         return  len(self.data_list)
