@@ -63,10 +63,11 @@ def train_net(net,
 
         for i, b in enumerate(batch(train, batch_size)):
             imgs = np.array([i[0] for i in b]).astype(np.float32)
-            true_masks = np.array([i[1] for i in b])
+            true_masks = np.array([i[1] for i in b]).astype(np.float32)
 
             imgs = torch.from_numpy(imgs)
             true_masks = torch.from_numpy(true_masks)
+            true_masks[true_masks>0] = 1
 
             if gpu:
                 imgs = imgs.cuda()
@@ -80,7 +81,7 @@ def train_net(net,
             loss = criterion(masks_probs_flat, true_masks_flat)
             epoch_loss += loss.item()
 
-            print('{0:.4f} --- loss: {1:.6f}'.format(i * batch_size / N_train, loss.item()))
+            print(f'Epoch {epoch}: {i * batch_size / N_train} --- loss: {loss.item()}')
 
             optimizer.zero_grad()
             loss.backward()
@@ -108,7 +109,7 @@ def get_args():
     parser.add_option('-l', '--learning-rate', dest='lr', default=0.1,
                       type='float', help='learning rate')
     parser.add_option('-g', '--gpu', action='store_true', dest='gpu',
-                      default=True, help='use cuda')
+                      default=False, help='use cuda')
     parser.add_option('-c', '--load', dest='load',
                       default=False, help='load file model')
     parser.add_option('-s', '--scale', dest='scale', type='float',

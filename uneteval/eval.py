@@ -14,6 +14,7 @@ def eval_net(net, dataset, gpu=False):
 
         img = torch.from_numpy(img).unsqueeze(0)
         true_mask = torch.from_numpy(true_mask).unsqueeze(0)
+        true_mask[true_mask > 0] = 1
 
         if gpu:
             img = img.cuda()

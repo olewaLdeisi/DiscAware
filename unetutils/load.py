@@ -20,11 +20,11 @@ def split_ids(ids, n=2):
     return ((id, i) for i in range(n) for id in ids)
 
 
-def to_cropped_imgs(ids, dir, suffix, scale, imgsize=None):
+def to_cropped_imgs(ids, dir, suffix, scale, imgsize=None, mode='RGB'):
     """From a list of tuples, returns the correct cropped img"""
     for id, pos in ids:
         i = Image.open(dir + id + suffix)
-        im = resize_and_crop(Image.open(dir + id + suffix), scale=scale, imgsize=imgsize)
+        im = resize_and_crop(Image.open(dir + id + suffix).convert(mode), scale=scale, imgsize=imgsize)
         yield get_square(im, pos)
 
 def get_imgs_and_masks(ids, dir_img, dir_mask, scale, imgsize=None):
@@ -36,7 +36,9 @@ def get_imgs_and_masks(ids, dir_img, dir_mask, scale, imgsize=None):
     imgs_switched = map(hwc_to_chw, imgs)
     imgs_normalized = map(normalize, imgs_switched)
 
-    masks = to_cropped_imgs(ids, dir_mask, '.png', scale, imgsize)
+    masks = to_cropped_imgs(ids, dir_mask, '.png', scale, imgsize, mode='P')
+    # masks_switched = map(hwc_to_chw, masks)
+    # masks_normalized = map(normalize, masks_switched)
 
     return zip(imgs_normalized, masks)
 
