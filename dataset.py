@@ -4,7 +4,7 @@ from PIL import Image
 
 root = "./data"
 
-class Dataloader(data.Dataset):
+class Dataset(data.Dataset):
     def __init__(self,train = True,transform=None):
         if transform:
             self.transform = tfs.Compose(transform)
@@ -44,3 +44,6 @@ class Dataloader(data.Dataset):
 
     def __len__(self):
         return  len(self.data_list)
+
+if __name__ == '__main__':
+    pass

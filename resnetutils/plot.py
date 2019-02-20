@@ -38,7 +38,7 @@ def plot_two(data_dict,save_path):
     plot_one(data_dict[key1], key1)
     plt.subplot(122)
     plot_one(data_dict[key2], key2)
-    plt.savefig(save_path + '/' + '{}.png'.format(key1.split()[1].title()))
+    plt.savefig(save_path + '{}.png'.format(key1.split()[1].title()))
 
 
 def save_plot(data_dict,save_path):
@@ -54,7 +54,7 @@ def save_plot(data_dict,save_path):
         plt.subplot(1, len(data_dict), i+1)
         plot_one(value, key)
     key1, *rest_key = data_dict.keys()
-    plt.savefig(save_path + '/' + '{}.png'.format(key1.split()[1].title()))
+    plt.savefig(save_path + '{}.png'.format(key1.split()[1].title()))
 
 
 def save_auc(auc_values, filename='AUG.png'):
